@@ -11,6 +11,7 @@ ENV/
 env/
 .env
 .env.*
+.env.local
 instance/
 local_settings.py
 .DS_Store
@@ -20,3 +21,6 @@ Thumbs.db
 *.suo
 *.ntvs*
 table_structure.txt
+.neon
+neontest.py
+node_modules/
