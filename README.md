@@ -11,3 +11,9 @@ NEON_FUNCTION_HOST_SUFFIX
 The database is hosted on the free tier of neon.tech
 Acess the database using environment variable DATABASE_URL
 though this is subject to change once proper roles/permissions are set
+
+# UV info
+
+use:
+uv sync --frozen
+when installing dependencies on other machines to ensure compatability between os.
