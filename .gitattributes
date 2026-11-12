@@ -1,0 +1,3 @@
+# Force LF for uv.lock and Python files across all operating systems
+uv.lock text eol=lf
+*.py text eol=lf
