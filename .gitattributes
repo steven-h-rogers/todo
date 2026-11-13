@@ -1,3 +1,8 @@
-# Force LF for uv.lock and Python files across all operating systems
+# Force LF for all non windows files
 uv.lock text eol=lf
 *.py text eol=lf
+* text=auto eol=lf
+
+# keep windows files encoded properly
+*.bat text eol=crlf
+*.ps1 text eol=crlf
