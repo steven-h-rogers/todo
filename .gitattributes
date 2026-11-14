@@ -3,6 +3,6 @@ uv.lock text eol=lf
 *.py text eol=lf
 * text=auto eol=lf
 
-# keep windows files encoded properly
+# keep windows files with standard line ending
 *.bat text eol=crlf
 *.ps1 text eol=crlf

@@ -36,3 +36,6 @@ dependencies = [
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+markers = [
+    "integration: tests that require external services (live Postgres database)"
+]
