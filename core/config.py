@@ -9,6 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ! Do not create an instance of this class, instead import config instance
 class Config(BaseSettings):
+    psycopg_prefix: SecretStr
+    sqlalchemy_prefix: SecretStr
+
     admin_username: SecretStr
     admin_password: SecretStr
 
@@ -30,15 +33,15 @@ class Config(BaseSettings):
     # use prod and test to connect to production or test database respectively
     @property
     def prod_admin_uri(self) -> str:
-        return f"postgresql://{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.production_pooled_suffix.get_secret_value()}"
+        return f"{self.sqlalchemy_prefix}{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.production_pooled_suffix.get_secret_value()}"
 
     @property
     def prod_read_only_uri(self) -> str:
-        return f"postgresql://{self.read_only_username.get_secret_value()}:{self.read_only_password.get_secret_value()}@{self.production_pooled_suffix.get_secret_value()}"
+        return f"{self.sqlalchemy_prefix}{self.read_only_username.get_secret_value()}:{self.read_only_password.get_secret_value()}@{self.production_pooled_suffix.get_secret_value()}"
 
     @property
     def prod_read_write_uri(self) -> str:
-        return f"postgresql://{self.read_write_username.get_secret_value()}:{self.read_write_password.get_secret_value()}@{self.production_pooled_suffix.get_secret_value()}"
+        return f"{self.sqlalchemy_prefix}{self.read_write_username.get_secret_value()}:{self.read_write_password.get_secret_value()}@{self.production_pooled_suffix.get_secret_value()}"
 
     @property
     def test_admin_uri(self) -> str:
