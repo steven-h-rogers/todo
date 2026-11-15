@@ -46,11 +46,11 @@ class Config(BaseSettings):
 
     @property
     def test_read_only_uri(self) -> str:
-            return f"postgresql://{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
+            return f"postgresql://{self.read_only_username.get_secret_value()}:{self.read_only_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
 
     @property
     def test_read_write_uri(self) -> str:
-            return f"postgresql://{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
+            return f"postgresql://{self.read_write_username.get_secret_value()}:{self.read_write_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
     
 
 

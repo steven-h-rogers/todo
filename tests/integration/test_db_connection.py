@@ -11,5 +11,11 @@ import pytest
 )
 def test_valid_db_connection(config_db_uri):
     with psycopg.connect(config_db_uri) as conn:
-        result = conn.execute("SELECT 1").fetchone()
-        assert result ==(1,)
+        try:
+            row = conn.execute("SELECT 1, current_user").fetchone()
+            print(row)
+            assert row[0] == 1
+        finally:
+            conn.rollback()
+
+
