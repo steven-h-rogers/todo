@@ -18,40 +18,41 @@ class Config(BaseSettings):
     read_write_username: SecretStr
     read_write_password: SecretStr
 
-    prod_pooled_suffix: SecretStr
-    prod_unpooled_suffix: SecretStr
+    production_pooled_suffix: SecretStr
+    production_unpooled_suffix: SecretStr
 
     test_pooled_suffix: SecretStr
     test_unpooled_suffix: SecretStr
 
     model_config = SettingsConfigDict(env_file=BASE_DIR /".env", extra="ignore")
 
+    # TODO: Make each property return string more modular to allow for a string like "postgresql+psycopg://" for when sqlalchemy is integrated
     # use prod and test to connect to production or test database respectively
     @property
     def prod_admin_uri(self) -> str:
-        return f"postgresql//:{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.prod_pooled_suffix.get_secret_value()}"
+        return f"postgresql://{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.production_pooled_suffix.get_secret_value()}"
 
     @property
     def prod_read_only_uri(self) -> str:
-        return f"postgresql//:{self.read_only_username.get_secret_value()}:{self.read_only_password.get_secret_value()}@{self.prod_pooled_suffix.get_secret_value()}"
+        return f"postgresql://{self.read_only_username.get_secret_value()}:{self.read_only_password.get_secret_value()}@{self.production_pooled_suffix.get_secret_value()}"
 
     @property
     def prod_read_write_uri(self) -> str:
-        return f"postgresql//:{self.read_write_username.get_secret_value()}:{self.read_write_password.get_secret_value()}@{self.prod_pooled_suffix.get_secret_value()}"
+        return f"postgresql://{self.read_write_username.get_secret_value()}:{self.read_write_password.get_secret_value()}@{self.production_pooled_suffix.get_secret_value()}"
 
     @property
-    def test_admin_uri(self):
-            return f"postgresql//:{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
+    def test_admin_uri(self) -> str:
+            return f"postgresql://{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
 
     @property
-    def test_read_only_uri(self):
-            return f"postgresql//:{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
+    def test_read_only_uri(self) -> str:
+            return f"postgresql://{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
 
     @property
-    def test_read_write_uri(self):
-            return f"postgresql//:{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
+    def test_read_write_uri(self) -> str:
+            return f"postgresql://{self.admin_username.get_secret_value()}:{self.admin_password.get_secret_value()}@{self.test_pooled_suffix.get_secret_value()}"
     
 
 
 # ! To use this class, import this instance
-config = Config() 
+config = Config()
