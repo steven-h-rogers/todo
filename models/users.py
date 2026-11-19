@@ -19,5 +19,5 @@ class Users(Base):
         CheckConstraint("char_length(usr_name) <= 63", name="check_usr_name_length"),
         CheckConstraint("char_length(pwd_hash) <= 511", name="check_pwd_hash_length"),
         CheckConstraint("email = lower(email)", name="check_email_lower"),
-        CheckConstraint("char_length(email) <= 320 AND char_length(email) >= 3", name="check_email_length")
+        CheckConstraint("char_length(email) <= 320 AND char_length(email) >= 3", name="check_email_length"),
     )

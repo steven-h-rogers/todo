@@ -3,13 +3,10 @@ import psycopg
 from core.config import config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from models.users import Users
+from models.task import Task
+from models.task_group import TaskGroup
 # from models.db import Base
-
-
-test_readonly_engine = create_engine(config.test_read_only_uri, echo=True, pool_pre_ping=True, pool_size=3)
-test_readwrite_engine = create_engine(config.test_read_write_uri, echo=True, pool_pre_ping=True, pool_size=3)
-
-
 
 # ENGINES
 @pytest.fixture(scope="session")
@@ -46,12 +43,25 @@ def readwrite_session(readwrite_test_engine):
         yield session
         session.rollback()
 
+# SEEDS FOR TESTING PRIVILEGE
+
+# Use when pre-existing data is needed
+@pytest.fixture(scope="function")
+def seeded_user(readwrite_session):
+    user = Users(usr_name="seeded_username", pwd_hash="seeded_hash123!@#", email="seed@test.com")
+    readwrite_session.add(user)
+    readwrite_session.commit()
+    readwrite_session.refresh(user)
+
+    yield user
+
+    readwrite_session.delete(user)
+    readwrite_session.commit()
 
 
 
 
-
-# psycopg fixtures
+# PSYCOPG
 
 @pytest.fixture
 def admin_db_connection():

@@ -19,6 +19,6 @@ class Task(Base):
     tsk_due_date : Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
 
     __table_args__ = (
-        CheckConstraint("priority_lvl <= 5 AND priority_lvl >= 0", name="check_valid_priority")
+        CheckConstraint("priority_lvl <= 5 AND priority_lvl >= 0", name="check_valid_priority"),
     )
 

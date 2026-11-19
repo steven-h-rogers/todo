@@ -37,5 +37,6 @@ dependencies = [
 pythonpath = ["."]
 testpaths = ["tests"]
 markers = [
-    "integration: tests that require external services (live Postgres database)"
+    "integration: tests that require external services (live Postgres database)",
+    "sqlalchemy: integration tests that use sqlalchemy"
 ]

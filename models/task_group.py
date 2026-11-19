@@ -19,6 +19,6 @@ class TaskGroup(Base):
 
 
     __table_args__ = (
-        CheckConstraint("char_length(grp_name) <= 255", name="check_grp_name_length")
+        CheckConstraint("char_length(grp_name) <= 255", name="check_grp_name_length"),
     )
 
