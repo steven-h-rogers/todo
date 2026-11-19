@@ -5,7 +5,7 @@ from typing import Optional
 from sqlalchemy import Text, ForeignKey, CheckConstraint, DateTime, func, text
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID
-from db import Base
+from models.db import Base
 
 class TaskGroup(Base):
     __tablename__="task_group"

@@ -4,8 +4,9 @@ import datetime
 from sqlalchemy import Text, DateTime, CheckConstraint, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
-from db import Base
+from models.db import Base
 
+# TODO: make sure to validate pwd_hash and email in schema
 class Users(Base):
     __tablename__ = "users"
     usr_id : Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, server_default=func.uuidv7(monotonic=True))
