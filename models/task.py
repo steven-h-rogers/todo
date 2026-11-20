@@ -1,10 +1,13 @@
 import uuid
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from models.db import Base
 from sqlalchemy import Text, CheckConstraint, ForeignKey, Integer, Boolean, DateTime, func, text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 from sqlalchemy.dialects.postgresql import UUID
+
+if TYPE_CHECKING:
+    from models.task_group import TaskGroup
 
 class Task(Base):
     __tablename__ = "task"
@@ -17,6 +20,9 @@ class Task(Base):
     is_complete : Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"))
     created_at : Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     tsk_due_date : Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    task_group: Mapped["TaskGroup"] = relationship("TaskGroup", back_populates="tasks")
+
 
     __table_args__ = (
         CheckConstraint("priority_lvl <= 5 AND priority_lvl >= 0", name="check_valid_priority"),

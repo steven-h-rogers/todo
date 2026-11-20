@@ -3,9 +3,10 @@ import psycopg
 from core.config import config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from models.users import Users
-from models.task import Task
-from models.task_group import TaskGroup
+from models import User, TaskGroup, Task
+# from models.users import User
+# from models.task import Task
+# from models.task_group import TaskGroup
 # from models.db import Base
 
 # ENGINES
@@ -48,7 +49,7 @@ def readwrite_session(readwrite_test_engine):
 # Use when pre-existing data is needed
 @pytest.fixture(scope="function")
 def seeded_user(readwrite_session):
-    user = Users(usr_name="seeded_username", pwd_hash="seeded_hash123!@#", email="seed@test.com")
+    user = User(usr_name="seeded_username", pwd_hash="seeded_hash123!@#", email="seed@test.com")
     readwrite_session.add(user)
     readwrite_session.commit()
     readwrite_session.refresh(user)
