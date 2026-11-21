@@ -46,7 +46,8 @@ def test_readonly_cant_write_sqlalchemy(readonly_session):
 
 @pytest.mark.sqlalchemy
 @pytest.mark.integration
-def test_readonly_can_read_sqlalchemy(readonly_session, seeded_user):
+@pytest.mark.usefixtures("seeded_user") # use this instead of passing into function so that it doesn't get marked as "not accessed"
+def test_readonly_can_read_sqlalchemy(readonly_session):
     statement = select(User).where(User.usr_name=="seeded_username1")
     fetched_user = readonly_session.scalar(statement)
 
