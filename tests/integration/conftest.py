@@ -44,19 +44,25 @@ def readwrite_session(readwrite_test_engine):
         yield session
         session.rollback()
 
-# SEEDS FOR TESTING PRIVILEGE
+# SEEDS FOR TESTING WHEN USER PRIVILEGE CANNOT CREATE ROWS
 
-# Use when pre-existing data is needed
+# Use when pre-existing data is needed and current role can't create rows itself
 @pytest.fixture(scope="function")
 def seeded_user(readwrite_session):
-    user = User(usr_name="seeded_username", pwd_hash="seeded_hash123!@#", email="seed@test.com")
-    readwrite_session.add(user)
+    users = [
+        User(usr_name="seeded_username1", pwd_hash="seeded_hash123!@#1", email="seed1@test.com"),
+        User(usr_name="seeded_username2", pwd_hash="seeded_hash123!@#2", email="seed2@test.com"),
+        User(usr_name="seeded_username3", pwd_hash="seeded_hash123!@#3", email="seed3@test.com")
+        ]
+    readwrite_session.add_all(users)
     readwrite_session.commit()
-    readwrite_session.refresh(user)
+    for user in users:
+        readwrite_session.refresh(user)
 
-    yield user
+    yield users
 
-    readwrite_session.delete(user)
+    for user in users:
+        readwrite_session.delete(user)
     readwrite_session.commit()
 
 

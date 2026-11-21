@@ -47,11 +47,11 @@ def test_readonly_cant_write_sqlalchemy(readonly_session):
 @pytest.mark.sqlalchemy
 @pytest.mark.integration
 def test_readonly_can_read_sqlalchemy(readonly_session, seeded_user):
-    statement = select(User).where(User.usr_name=="seeded_username")
+    statement = select(User).where(User.usr_name=="seeded_username1")
     fetched_user = readonly_session.scalar(statement)
 
     assert fetched_user.usr_id is not None
-    assert fetched_user.usr_name == "seeded_username"
-    assert fetched_user.pwd_hash == "seeded_hash123!@#"
-    assert fetched_user.email == "seed@test.com"
+    assert fetched_user.usr_name == "seeded_username1"
+    assert fetched_user.pwd_hash == "seeded_hash123!@#1"
+    assert fetched_user.email == "seed1@test.com"
     assert fetched_user.created_at is not None
