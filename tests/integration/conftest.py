@@ -65,6 +65,7 @@ def seeded_users(readwrite_session):
         readwrite_session.delete(user)
     readwrite_session.commit()
 
+# users with task_groups
 @pytest.fixture(scope="function")
 def seeded_users_with_task_groups(readwrite_session):
 
@@ -73,16 +74,21 @@ def seeded_users_with_task_groups(readwrite_session):
         User(usr_name="seeded_username2", pwd_hash="seeded_hash123!@#2", email="seed2@test.com"),
         User(usr_name="seeded_username3", pwd_hash="seeded_hash123!@#3", email="seed3@test.com")
         ]
+
+    users[0].task_groups.append(TaskGroup(grp_name="testgroup1", grp_desc="test description"))
+    users[1].task_groups.append(TaskGroup(grp_name="testgroup2", grp_desc="test description"))
+    users[2].task_groups.append(TaskGroup(grp_name="testgroup3", grp_desc="test description"))
+
     readwrite_session.add_all(users)
     readwrite_session.commit()
     for user in users:
         readwrite_session.refresh(user)
 
-    task_groups = [
-        # TaskGroup(usr_id=users[0].usr_id, grp_name=) update from here
-    ]
+    yield users
 
-
+    for user in users:
+        readwrite_session.delete(user)
+    readwrite_session.commit()
 
 
 # PSYCOPG

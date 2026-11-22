@@ -19,7 +19,7 @@ class TaskGroup(Base):
     grp_name: Mapped[str] = mapped_column(Text, nullable=False, server_default="Default Group")
     grp_desc: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
-    grp_due_date: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime(timezone=True))
+    grp_due_date: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
 
     user: Mapped["User"] = relationship("User", back_populates="task_groups")
     tasks: Mapped[List["Task"]] = relationship("Task", back_populates="task_group")

@@ -44,6 +44,8 @@ def test_readonly_cant_write_sqlalchemy(readonly_session):
 
     assert isinstance(exc_info.value.orig, InsufficientPrivilege)
 
+
+# tests that multiple users can be add and read from the database
 @pytest.mark.sqlalchemy
 @pytest.mark.integration
 @pytest.mark.usefixtures("seeded_users") # use this instead of passing into function so that it doesn't get marked as "not accessed"
@@ -67,3 +69,10 @@ def test_readonly_can_read_sqlalchemy(readonly_session):
     assert fetched_user3.pwd_hash == "seeded_hash123!@#3"
     assert fetched_user3.email == "seed3@test.com"
     assert fetched_user3.created_at is not None
+
+
+@pytest.mark.integration
+@pytest.mark.sqlalchemy
+@pytest.mark.usefixtures("seeded_users_with_task_groups")
+def test_readonly_can_read_task_groups_from_user(readonly_session):
+    pass # TODO: complete this test
