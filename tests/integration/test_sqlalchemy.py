@@ -2,11 +2,9 @@ import pytest
 from psycopg.errors import InsufficientPrivilege
 from sqlalchemy import select, insert, update, delete, DropTable, CreateTable
 from sqlalchemy.exc import ProgrammingError
-# from sqlalchemy.orm import Session
 from models.task import Task
 from models.task_group import TaskGroup
 from models.users import User
-# from models.db import Base
 
 
 # test that admin user can read and write
@@ -19,6 +17,7 @@ def test_admin_can_read_and_write_sqlalchemy(admin_session):
     admin_session.flush()
     print(f'usr_id: {test_user.usr_id}')
     assert test_user.usr_id is not None
+
 
 # test that readwrite user can actually read and write
 @pytest.mark.sqlalchemy
@@ -75,4 +74,51 @@ def test_readonly_can_read_sqlalchemy(readonly_session):
 @pytest.mark.sqlalchemy
 @pytest.mark.usefixtures("seeded_users_with_task_groups")
 def test_readonly_can_read_task_groups_from_user(readonly_session):
-    pass # TODO: complete this test
+    stmt1 = select(TaskGroup).join(TaskGroup.user).where(User.usr_name == "seeded_username1")
+    stmt2 = select(TaskGroup).join(TaskGroup.user).where(User.usr_name == "seeded_username2")
+    stmt3 = select(TaskGroup).join(TaskGroup.user).where(User.usr_name == "seeded_username3")
+
+    user1_task_groups = readonly_session.scalars(stmt1).all()
+    user1_task_group1 = user1_task_groups[0]
+    user1_task_group2 = user1_task_groups[1]
+    user2_task_group = readonly_session.scalar(stmt2)
+    user3_task_group = readonly_session.scalar(stmt3)
+
+    # check first user's taskgroups
+    assert user1_task_group1.grp_id is not None
+    assert user1_task_group1.usr_id is not None
+    assert user1_task_group1.user is not None
+    assert user1_task_group1.grp_name == "testgroup1"
+    assert user1_task_group1.grp_desc == "test description"
+    assert user1_task_group1.grp_due_date is None
+
+    assert user1_task_group2.grp_id is not None
+    assert user1_task_group2.usr_id is not None
+    assert user1_task_group2.user is not None
+    assert user1_task_group2.grp_name == "testgroup1.2"
+    assert user1_task_group2.grp_desc == "test description"
+    assert user1_task_group2.grp_due_date is None
+
+    assert user1_task_group1.usr_id == user1_task_group2.usr_id # make sure both test groups refer to the same user owner
+    assert user1_task_group1.user == user1_task_group2.user # make sure both test groups refer to the same user owner
+
+    # check second user's taskgroup
+    assert user2_task_group.grp_id is not None
+    assert user2_task_group.usr_id is not None
+    assert user2_task_group.user is not None
+    assert user2_task_group.grp_name == "testgroup2"
+    assert user2_task_group.grp_desc == "test description"
+    assert user2_task_group.grp_due_date is None
+
+    # check third user's taskgroup
+    assert user3_task_group.grp_id is not None
+    assert user3_task_group.usr_id is not None
+    assert user3_task_group.user is not None
+    assert user3_task_group.grp_name == "testgroup3"
+    assert user3_task_group.grp_desc == "test description"
+    assert user3_task_group.grp_due_date is None
+    
+
+
+
+

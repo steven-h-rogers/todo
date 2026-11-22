@@ -76,18 +76,24 @@ def seeded_users_with_task_groups(readwrite_session):
         ]
 
     users[0].task_groups.append(TaskGroup(grp_name="testgroup1", grp_desc="test description"))
+    users[0].task_groups.append(TaskGroup(grp_name="testgroup1.2", grp_desc="test description"))
+
     users[1].task_groups.append(TaskGroup(grp_name="testgroup2", grp_desc="test description"))
     users[2].task_groups.append(TaskGroup(grp_name="testgroup3", grp_desc="test description"))
 
     readwrite_session.add_all(users)
     readwrite_session.commit()
     for user in users:
-        readwrite_session.refresh(user)
+        for task_group in user.task_groups:
+            readwrite_session.refresh(task_group)
+            readwrite_session.refresh(user)
 
     yield users
 
     for user in users:
-        readwrite_session.delete(user)
+        for task_group in user.task_groups:
+            readwrite_session.delete(task_group)
+            readwrite_session.delete(user)
     readwrite_session.commit()
 
 
