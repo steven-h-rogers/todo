@@ -48,7 +48,7 @@ def readwrite_session(readwrite_test_engine):
 
 # Use when pre-existing data is needed and current role can't create rows itself
 @pytest.fixture(scope="function")
-def seeded_user(readwrite_session):
+def seeded_users(readwrite_session):
     users = [
         User(usr_name="seeded_username1", pwd_hash="seeded_hash123!@#1", email="seed1@test.com"),
         User(usr_name="seeded_username2", pwd_hash="seeded_hash123!@#2", email="seed2@test.com"),
@@ -64,6 +64,23 @@ def seeded_user(readwrite_session):
     for user in users:
         readwrite_session.delete(user)
     readwrite_session.commit()
+
+@pytest.fixture(scope="function")
+def seeded_users_with_task_groups(readwrite_session):
+
+    users = [
+        User(usr_name="seeded_username1", pwd_hash="seeded_hash123!@#1", email="seed1@test.com"),
+        User(usr_name="seeded_username2", pwd_hash="seeded_hash123!@#2", email="seed2@test.com"),
+        User(usr_name="seeded_username3", pwd_hash="seeded_hash123!@#3", email="seed3@test.com")
+        ]
+    readwrite_session.add_all(users)
+    readwrite_session.commit()
+    for user in users:
+        readwrite_session.refresh(user)
+
+    task_groups = [
+        # TaskGroup(usr_id=users[0].usr_id, grp_name=) update from here
+    ]
 
 
 

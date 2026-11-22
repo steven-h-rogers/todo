@@ -46,13 +46,24 @@ def test_readonly_cant_write_sqlalchemy(readonly_session):
 
 @pytest.mark.sqlalchemy
 @pytest.mark.integration
-@pytest.mark.usefixtures("seeded_user") # use this instead of passing into function so that it doesn't get marked as "not accessed"
+@pytest.mark.usefixtures("seeded_users") # use this instead of passing into function so that it doesn't get marked as "not accessed"
 def test_readonly_can_read_sqlalchemy(readonly_session):
-    statement = select(User).where(User.usr_name=="seeded_username1")
-    fetched_user = readonly_session.scalar(statement)
+    fetched_user1, fetched_user2, fetched_user3 = tuple(readonly_session.query(User).all())
 
-    assert fetched_user.usr_id is not None
-    assert fetched_user.usr_name == "seeded_username1"
-    assert fetched_user.pwd_hash == "seeded_hash123!@#1"
-    assert fetched_user.email == "seed1@test.com"
-    assert fetched_user.created_at is not None
+    assert fetched_user1.usr_id is not None
+    assert fetched_user1.usr_name == "seeded_username1"
+    assert fetched_user1.pwd_hash == "seeded_hash123!@#1"
+    assert fetched_user1.email == "seed1@test.com"
+    assert fetched_user1.created_at is not None
+   
+    assert fetched_user2.usr_id is not None
+    assert fetched_user2.usr_name == "seeded_username2"
+    assert fetched_user2.pwd_hash == "seeded_hash123!@#2"
+    assert fetched_user2.email == "seed2@test.com"
+    assert fetched_user2.created_at is not None
+
+    assert fetched_user3.usr_id is not None
+    assert fetched_user3.usr_name == "seeded_username3"
+    assert fetched_user3.pwd_hash == "seeded_hash123!@#3"
+    assert fetched_user3.email == "seed3@test.com"
+    assert fetched_user3.created_at is not None
