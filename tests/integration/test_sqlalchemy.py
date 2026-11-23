@@ -117,6 +117,60 @@ def test_readonly_can_read_task_groups_from_user(readonly_session):
     assert user3_task_group.grp_name == "testgroup3"
     assert user3_task_group.grp_desc == "test description"
     assert user3_task_group.grp_due_date is None
+
+    @pytest.mark.integration
+    @pytest.mark.sqlalchemy
+    @pytest.mark.usefixtures("seeded_users_with_task_groups_with_tasks")
+    def test_readonly_can_read_task_from_task_group(readonly_session):
+        stmt1 = select(Task).join(Task.task_group).join(TaskGroup.user).where(User.usr_name == "seeded_username1")
+        stmt2 = select(Task).join(Task.task_group).join(TaskGroup.user).where(User.usr_name == "seeded_username2")
+        stmt3 = select(Task).join(Task.task_group).join(TaskGroup.user).where(User.usr_name == "seeded_username3")
+
+        user1_tasks = readonly_session.scalars(stmt1).all()
+        user2_tasks = readonly_session.scalars(stmt2).all() # doing it this way to see if behavior of scalars and all change how it is returned
+        user3_tasks = readonly_session.scalar(stmt3)
+
+        assert user1_tasks[0].tsk_id is not None
+        assert user1_tasks[0].grp_id is not None
+        assert user1_tasks[0].tsk_name == "test1.0"
+        assert user1_tasks[0].tsk_desc == "test1.0 description"
+        assert user1_tasks[0].priority_lvl == 2
+        assert user1_tasks[0].is_complete == False
+
+        assert user1_tasks[1].tsk_id is not None
+        assert user1_tasks[1].grp_id is not None
+        assert user1_tasks[1].tsk_name == "test1.1"
+        assert user1_tasks[1].tsk_desc == "test1.1 description"
+        assert user1_tasks[1].priority_lvl == 3
+        assert user1_tasks[1].is_complete == False
+
+        assert user1_tasks[2].tsk_id is not None
+        assert user1_tasks[2].grp_id is not None
+        assert user1_tasks[2].tsk_name == "test1.2"
+        assert user1_tasks[2].tsk_desc == "test1.2 description"
+        assert user1_tasks[2].priority_lvl == 2
+        assert user1_tasks[2].is_complete == False
+
+        assert user1_tasks[0].task_group == user1_tasks[1].task_group
+        assert user1_tasks[0].task_group != user1_tasks[2].task_group
+
+        assert user2_tasks[0].tsk_id is not None
+        assert user2_tasks[0].grp_id is not None
+        assert user2_tasks[0].tsk_name == "test2"
+        assert user2_tasks[0].tsk_desc == "test2 description"
+        assert user2_tasks[0].priority_lvl == 3
+        assert user2_tasks[0].is_complete == True
+
+        assert user3_tasks.tsk_id is not None
+        assert user3_tasks.grp_id is not None
+        assert user3_tasks.tsk_name == "test3"
+        assert user3_tasks.tsk_desc == "test3 description"
+        assert user3_tasks.priority_lvl == 5
+        assert user3_tasks.is_complete == True
+
+
+
+
     
 
 

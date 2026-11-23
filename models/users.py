@@ -20,7 +20,7 @@ class User(Base):
     email : Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     created_at : Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now()) 
 
-    task_groups: Mapped[List["TaskGroup"]] = relationship("TaskGroup", back_populates="user")
+    task_groups: Mapped[List["TaskGroup"]] = relationship("TaskGroup", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
 
     __table_args__ = (
         CheckConstraint("char_length(usr_name) <= 63", name="check_usr_name_length"),

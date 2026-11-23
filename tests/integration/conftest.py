@@ -120,7 +120,7 @@ def seeded_users_with_task_groups_with_tasks(readwrite_session):
     users[0].task_groups[0].tasks.append(Task(tsk_name="test1.1", tsk_desc="test1.1 description", priority_lvl=3, is_complete=False))
 
     users[0].task_groups[1].tasks.append(Task(tsk_name="test1.2", tsk_desc="test1.2 description", priority_lvl=2, is_complete=False))
-    # TODO: make sure that the relationship is configured properly between task_group and task, then finish this fixture
+    
     users[1].task_groups[0].tasks.append(Task(tsk_name="test2", tsk_desc="test2 description", priority_lvl=3, is_complete=True))
 
     users[2].task_groups[0].tasks.append(Task(tsk_name="test3", tsk_desc="test3 description", priority_lvl=5, is_complete=True))
