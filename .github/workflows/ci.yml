@@ -24,4 +24,15 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run tests
+        env:
+          PSYCOPG_PREFIX: ${{secrets.PSYCOPG_PREFIX}}
+          SQLALCHEMY_PREFIX: ${{secrets.SQLALCHEMY_PREFIX}}
+          ADMIN_USERNAME: ${{secrets.ADMIN_USERNAME}}
+          ADMIN_PASSWORD: ${{secrets.ADMIN_PASSWORD}}
+          READ_WRITE_USERNAME: ${{secrets.READ_WRITE_USERNAME}}
+          READ_WRITE_PASSWORD: ${{secrets.READ_WRITE_PASSWORD}}
+          READ_ONLY_USERNAME: ${{secrets.READ_ONLY_USERNAME}}
+          READ_ONLY_PASSWORD: ${{secrets.READ_ONLY_PASSWORD}}
+          TEST_POOLED_SUFFIX: ${{secrets.TEST_POOLED_SUFFIX}}
+          TEST_UNPOOLED_SUFFIX: ${{secrets.TEST_UNPOOLED_SUFFIX}}
         run: uv run pytest
