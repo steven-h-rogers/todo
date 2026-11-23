@@ -116,23 +116,30 @@ def seeded_users_with_task_groups_with_tasks(readwrite_session):
     users[2].task_groups.append(TaskGroup(grp_name="testgroup3", grp_desc="test description"))
 
     # define and assign tasks to each task group
-    users[0].task_groups[0].tasks.append(Task(tsk_name="test1", tsk_desc="test1 description", priority_lvl=2, is_complete=False))
-    users[0].task_groups[0].tasks.append(Task(tsk_name="test1.2", tsk_desc="test1.2 description", priority_lvl=3, is_complete=False))
+    users[0].task_groups[0].tasks.append(Task(tsk_name="test1.0", tsk_desc="test1.0 description", priority_lvl=2, is_complete=False))
+    users[0].task_groups[0].tasks.append(Task(tsk_name="test1.1", tsk_desc="test1.1 description", priority_lvl=3, is_complete=False))
 
+    users[0].task_groups[1].tasks.append(Task(tsk_name="test1.2", tsk_desc="test1.2 description", priority_lvl=2, is_complete=False))
     # TODO: make sure that the relationship is configured properly between task_group and task, then finish this fixture
-    users[1].task_groups.tasks
+    users[1].task_groups[0].tasks.append(Task(tsk_name="test2", tsk_desc="test2 description", priority_lvl=3, is_complete=True))
+
+    users[2].task_groups[0].tasks.append(Task(tsk_name="test3", tsk_desc="test3 description", priority_lvl=5, is_complete=True))
+
 
     readwrite_session.add_all(users)
     readwrite_session.commit()
     for user in users:
         for task_group in user.task_groups:
-            readwrite_session.refresh(task_group)
-            readwrite_session.refresh(user)
+            for task in task_group.tasks:
+                readwrite_session.refresh(task)
+                readwrite_session.refresh(task_group)
+                readwrite_session.refresh(user)
 
     yield users
 
     for user in users:
         for task_group in user.task_groups:
+            readwrite_session.delete(task)
             readwrite_session.delete(task_group)
             readwrite_session.delete(user)
     readwrite_session.commit()

@@ -21,7 +21,7 @@ class Task(Base):
     created_at : Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     tsk_due_date : Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    task_group: Mapped["TaskGroup"] = relationship("TaskGroup", back_populates="task")
+    task_group: Mapped["TaskGroup"] = relationship("TaskGroup", back_populates="tasks", cascade="all, delete-orphan", passive_deletes=True)
 
 
     __table_args__ = (

@@ -22,7 +22,7 @@ class TaskGroup(Base):
     grp_due_date: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
 
     user: Mapped["User"] = relationship("User", back_populates="task_groups")
-    tasks: Mapped[List["Task"]] = relationship("Task", back_populates="task_group")
+    tasks: Mapped[List["Task"]] = relationship("Task", back_populates="task_group", cascade="all, delete-orphan", passive_deletes=True)
 
 
 
