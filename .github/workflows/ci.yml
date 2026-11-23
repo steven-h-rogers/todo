@@ -35,4 +35,6 @@ jobs:
           READ_ONLY_PASSWORD: ${{secrets.READ_ONLY_PASSWORD}}
           TEST_POOLED_SUFFIX: ${{secrets.TEST_POOLED_SUFFIX}}
           TEST_UNPOOLED_SUFFIX: ${{secrets.TEST_UNPOOLED_SUFFIX}}
+          PRODUCTION_POOLED_SUFFIX: "dummy_pooled_suffix"
+          PRODUCTION_UNPOOLED_SUFFIX: "dummy_unpooled_suffix"
         run: uv run pytest
