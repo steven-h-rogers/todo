@@ -4,10 +4,6 @@ from core.config import config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from models import User, TaskGroup, Task
-# from models.users import User
-# from models.task import Task
-# from models.task_group import TaskGroup
-# from models.db import Base
 
 # ENGINES
 @pytest.fixture(scope="session")
